@@ -7,12 +7,13 @@ plugins {
     kotlin("jvm") version "1.3.70"
 }
 
-group = "com.smor"
+group = "com.londogard"
 version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
     jcenter()
+    maven("https://jitpack.io")
     //maven { url 'https://oss.jfrog.org/oss-release-local' }
 }
 
@@ -20,12 +21,14 @@ dependencies {
     // Kotlin
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
-
+    implementation("com.github.zxing.zxing:core:zxing-3.4.0")
+    implementation("org.apache.commons:commons-compress:1.20")
+    implementation("com.github.luben:zstd-jni:1.4.5-6")
     /**
     Compression:
-    implementation 'org.apache.commons:commons-compress:1.18'
+    implementation("org.xerial.snappy:snappy-java:1.1.7.6")
     implementation group: "com.github.luben", name: "zstd-jni", version: "1.4.3-1"
-    implementation 'org.xerial.snappy:snappy-java:1.1.7.3'
+
 
     Serialization:
     https://github.com/Kotlin/kotlinx.serialization

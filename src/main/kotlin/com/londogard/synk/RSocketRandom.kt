@@ -1,4 +1,4 @@
-package com.smor.synk
+package com.londogard.synk
 
 /**
 fun main(args: Array<String>) {

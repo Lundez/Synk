@@ -1,4 +1,4 @@
-package com.smor.synk
+package com.londogard.synk
 
 import org.amshove.kluent.shouldBeEqualTo
 import kotlin.test.Test
