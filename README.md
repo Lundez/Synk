@@ -1,21 +1,19 @@
 # Synk
-Sync &amp; Transfer files. Made on the JVM by Smør.
+Sync &amp; Transfer files. Made on the JVM by Londogard.
 
-What we need:
+### TODOs
 
-1. Client
-2. Server
-3. DiscoveryService
-4. CompressionUtil: Make use of [Zstandard](https://facebook.github.io/zstd/)? 
-5. Tests!
+- [X] CompressionUtil using [Zstandard](https://facebook.github.io/zstd/) + tar to send directories as one single file
+- [ ] DiscoveryService (finished `getLanIP`+`getExternalIP` but still no handshake)
+- [ ] Server
+- [ ] Client
+- [ ] Investigate if perhaps KTOR or some lambda framework could be a good fit, rather than raw sockets.
+- [ ] QR code generation + "deep-link generation"
+- [ ] Android App
+- [ ] Tests
 
-What we need to think about.  
-* Selection of client (KTOR to begin with, then moving to a lower level perhaps?)
-* Selection of server (same as above?)
-* Merge Server/Client and only have one type?
-* _Optimizations_
 
-Advanced / Awesome mode:
+### Advanced / Awesome mode TODOs:
 * Packet handling by cases
 * Encryption
 * GraalVM

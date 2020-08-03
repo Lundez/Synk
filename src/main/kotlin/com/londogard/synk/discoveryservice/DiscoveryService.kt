@@ -16,10 +16,10 @@ object DiscoverService {
             .first { ip -> ip.startsWith("192") }
 
     fun getExternalIP(): String = try {
-        val checkIpStream = URL("https://ipconfig.io/ip").openStream()
-        val reader = BufferedReader(InputStreamReader(checkIpStream))
-
-        reader.readLine()
+        URL("https://ipconfig.io/ip")
+            .openStream()
+            .reader()
+            .use { readLine() } ?: getLanIP()
     } catch (exception: IOException) {
         "Can't reach checkip.amazonaws.com to verify IP"
     }
