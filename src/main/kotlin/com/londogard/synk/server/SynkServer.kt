@@ -1,35 +1,39 @@
 package com.londogard.synk.server
 
 import com.londogard.synk.discoveryservice.DiscoverService
-import java.io.FileOutputStream
+import com.londogard.synk.discoveryservice.DiscoverService.Port
+import com.londogard.synk.utils.CompressionUtil
 import java.net.InetSocketAddress
-import java.nio.channels.FileChannel
 import java.nio.channels.ServerSocketChannel
+import java.nio.file.Paths
 
-const val Port = 31415
-
-class SynkServer {
+object SynkServer {
     fun server(filename: String) {
         println("Server::init")
         val inetAddress = InetSocketAddress(DiscoverService.getLanIP(), Port)
+        println("Server::Compressing file $filename")
+        val filePath = Paths.get(filename)
+        val path = CompressionUtil.compressTarZst(filePath)
 
-        println("${inetAddress.hostName}:${inetAddress.port}") // simplify by using HEX.
-        val serverSocketChannel = ServerSocketChannel.open()
+        println(DiscoverService.getConnectionCode(filePath))
+        val serverSocketChannel = ServerSocketChannel.open().apply { bind(inetAddress) }
 
-        serverSocketChannel.bind(inetAddress)
+        println("Server::Connection Code = ${DiscoverService.getConnectionCode(filePath)}")
         val socketChannel = serverSocketChannel.accept()
         println("Server::Accepted Client")
 
-        val fileChannel: FileChannel = FileOutputStream("$filename.tar.szt").channel
-        println("Server::Accepting file $filename")
-        fileChannel.transferFrom(socketChannel, 0, Long.MAX_VALUE) // Create for-loop
+
+        val fileChannel = path.toFile().inputStream().channel
+
+        println("Server::Sending file $filename")
+        fileChannel.transferTo(0, fileChannel.size(), socketChannel)
+
+
         println("Server::Finished, shutting done")
         socketChannel.close()
         serverSocketChannel.close()
+        fileChannel.close()
+        path.toFile().delete()
         println("Server::Closed")
     }
-}
-
-fun main() {
-    SynkServer().server("hello")
 }

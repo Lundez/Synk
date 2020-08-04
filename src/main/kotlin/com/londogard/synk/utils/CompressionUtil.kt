@@ -1,42 +1,70 @@
 package com.londogard.synk.utils
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream
+import org.apache.commons.compress.compressors.zstandard.ZstdCompressorInputStream
 import org.apache.commons.compress.compressors.zstandard.ZstdCompressorOutputStream
 import java.io.*
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
-fun createTarZstd(`in`: File, out: File) {
-    val fOut = FileOutputStream(out)
-    val bOut = BufferedOutputStream(fOut)
+object CompressionUtil {
+    const val suffix = ".tar.zst"
 
-    val zstdOut = ZstdCompressorOutputStream(bOut)
-    TarArchiveOutputStream(zstdOut).use {
-        addFileToTar(it, `in`, "")
-        it.finish()
+    fun decompressTarZst(`in`: Path, outputPath: Path = `in`.parent ?: Paths.get("")) {
+        Files
+            .newInputStream(`in`)
+            .buffered()
+            .let(::ZstdCompressorInputStream)
+            .let(::TarArchiveInputStream)
+            .use { tarArchive ->
+                tarArchive.nextEntry
+                while (tarArchive.currentEntry != null) {
+                    val path = outputPath.resolve(tarArchive.currentEntry.name)
+
+                    if (tarArchive.currentEntry.isDirectory && !Files.exists(path)) Files.createDirectories(path)
+                    else Files.copy(tarArchive, path)
+
+                    tarArchive.nextEntry
+                }
+            }
+
     }
-}
 
-private fun addFileToTar(tOut: TarArchiveOutputStream, out: File, base: String) {
-    val entryName = base + out.name
-    val tarEntry = TarArchiveEntry(out, entryName)
-    tOut.putArchiveEntry(tarEntry)
+    fun compressTarZst(`in`: Path): Path {
+        val path = Paths.get("$`in`$suffix")
+        Files
+            .newOutputStream(path)
+            .buffered()
+            .also(::println)
+            .let(::ZstdCompressorOutputStream)
+            .let(::TarArchiveOutputStream)
+            .also(::println)
+            .use { outputStream ->
+                addFileToTar(outputStream, `in`.toFile())
+                outputStream.finish()
+            }
 
-    if (out.isFile) {
-        FileInputStream(out).use {
-            it.copyTo(tOut)
+        return path
+    }
+
+    private fun addFileToTar(tOut: TarArchiveOutputStream, `in`: File, base: String = "") {
+        val basePath = Paths.get(base, `in`.name).toString()
+        val tarEntry = TarArchiveEntry(`in`, basePath)
+        tOut.putArchiveEntry(tarEntry)
+
+        if (`in`.isFile) {
+            `in`.inputStream().use {
+                it.copyTo(tOut)
+                tOut.closeArchiveEntry()
+            }
+        } else {
             tOut.closeArchiveEntry()
-        }
-    } else {
-        tOut.closeArchiveEntry()
-        out.listFiles()?.forEach {
-            addFileToTar(tOut, it, "$entryName/${File.pathSeparatorChar}")
+            `in`.listFiles()?.forEach {
+                addFileToTar(tOut, it, basePath)
+            }
         }
     }
-}
-
-fun main() {
-    createTarZstd(
-        File("/home/londet/git/synk"),
-        File("/home/londet/A.tar.zstd")
-    )
 }
