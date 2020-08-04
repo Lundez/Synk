@@ -6,12 +6,13 @@ plugins {
     `maven-publish`
     application
     id("com.github.johnrengelman.shadow") version "5.2.0"
-    id("com.palantir.graal") version "0.7.1"
+    // id("com.palantir.graal") version "0.7.1"
     kotlin("jvm") version "1.3.72"
 }
 
 group = "com.londogard"
 version = "1.0-SNAPSHOT"
+
 application {
     mainClassName = "com.londogard.synk.SynkKt"
 }
@@ -20,7 +21,6 @@ repositories {
     mavenCentral()
     jcenter()
     maven("https://jitpack.io")
-    //maven { url 'https://oss.jfrog.org/oss-release-local' }
 }
 
 dependencies {
@@ -56,11 +56,14 @@ dependencies {
     testImplementation("org.slf4j:slf4j-simple:1.7.26")
 }
 
-graal {
-    graalVersion("20.1.0.r8-grl")
-    mainClass("com.londogard.synk.SynkKt")
-    outputName("synk")
-}
+// Using graal achieves 50% size reduction of the run-file.
+// graal {
+//     mainClass("com.londogard.synk.SynkKt")
+//     outputName("synk")
+//     // option("-H:+ReportExceptionStackTraces")
+//     // option("--no-fallback")
+//     // option("--static")
+// }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
