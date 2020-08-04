@@ -15,19 +15,16 @@ object SynkServer {
         val filePath = Paths.get(filename)
         val path = CompressionUtil.compressTarZst(filePath)
 
-        println(DiscoverService.getConnectionCode(filePath))
         val serverSocketChannel = ServerSocketChannel.open().apply { bind(inetAddress) }
 
         println("Server::Connection Code = ${DiscoverService.getConnectionCode(filePath)}")
         val socketChannel = serverSocketChannel.accept()
         println("Server::Accepted Client")
 
-
         val fileChannel = path.toFile().inputStream().channel
 
         println("Server::Sending file $filename")
         fileChannel.transferTo(0, fileChannel.size(), socketChannel)
-
 
         println("Server::Finished, shutting done")
         socketChannel.close()

@@ -25,6 +25,7 @@ object CompressionUtil {
                     val path = outputPath.resolve(tarArchive.currentEntry.name)
 
                     if (tarArchive.currentEntry.isDirectory && !Files.exists(path)) Files.createDirectories(path)
+                    else if (tarArchive.currentEntry.isDirectory) Files.createDirectories(path.parent.resolve("copy_synk"))
                     else Files.copy(tarArchive, path)
 
                     tarArchive.nextEntry
@@ -38,10 +39,8 @@ object CompressionUtil {
         Files
             .newOutputStream(path)
             .buffered()
-            .also(::println)
             .let(::ZstdCompressorOutputStream)
             .let(::TarArchiveOutputStream)
-            .also(::println)
             .use { outputStream ->
                 addFileToTar(outputStream, `in`.toFile())
                 outputStream.finish()

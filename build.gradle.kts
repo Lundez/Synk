@@ -35,16 +35,11 @@ dependencies {
     /**
     Compression:
     implementation("org.xerial.snappy:snappy-java:1.1.7.6")
-    implementation group: "com.github.luben", name: "zstd-jni", version: "1.4.3-1"
-
 
     Serialization:
     https://github.com/Kotlin/kotlinx.serialization
 
-    CLI:
-    https://github.com/Kotlin/kotlinx.cli
-    https://ajalt.github.io/clikt/
-    https://picocli.info/
+    HTTP w/o reflections:
     https://fuel.gitbook.io/documentation/
     https://dev.to/viniciusccarvalho/building-a-native-cli-with-kotlin-and-graalvm-55ee
      */
