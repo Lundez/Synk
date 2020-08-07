@@ -5,7 +5,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream
 import org.apache.commons.compress.compressors.zstandard.ZstdCompressorInputStream
 import org.apache.commons.compress.compressors.zstandard.ZstdCompressorOutputStream
-import java.io.*
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -13,39 +13,46 @@ import java.nio.file.Paths
 object CompressionUtil {
     const val suffix = ".tar.zst"
 
-    fun decompressTarZst(`in`: Path, outputPath: Path = `in`.parent ?: Paths.get("")) {
+    private tailrec fun createDirectories(path: Path, index: Int = 0): Path {
+        val indexedPath = if (index > 0) path.resolveSibling("${path.fileName}_$index") else path
+
+        return if (Files.exists(indexedPath)) createDirectories(path, index + 1)
+        else Files.createDirectories(indexedPath)
+    }
+
+    fun Path.decompress(outputPath: Path = this.parent ?: Paths.get("")): Path {
+        var finalOutputPath = outputPath
+
         Files
-            .newInputStream(`in`)
+            .newInputStream(this)
             .buffered()
             .let(::ZstdCompressorInputStream)
             .let(::TarArchiveInputStream)
             .use { tarArchive ->
                 tarArchive.nextEntry
                 while (tarArchive.currentEntry != null) {
-                    val path = outputPath.resolve(tarArchive.currentEntry.name)
+                    val path = finalOutputPath.resolve(tarArchive.currentEntry.name)
 
-                    if (tarArchive.currentEntry.isDirectory && !Files.exists(path)) Files.createDirectories(path)
-                    else if (tarArchive.currentEntry.isDirectory) Files.createDirectories(path.parent.resolve("copy_synk"))
+                    if (tarArchive.currentEntry.isDirectory)
+                        createDirectories(path).also { if (it != path) finalOutputPath = it }
                     else Files.copy(tarArchive, path)
 
                     tarArchive.nextEntry
                 }
             }
-
+        return finalOutputPath
     }
 
-    fun compressTarZst(`in`: Path): Path {
-        val path = Paths.get("$`in`$suffix")
+    fun Path.compress(): Path {
+        val path = Paths.get("$this$suffix")
         Files
             .newOutputStream(path)
-            .buffered()
-            .let(::ZstdCompressorOutputStream)
+            .let(::ZstdCompressorOutputStream)   // TODO remove to reduce reflection for GraalVM
             .let(::TarArchiveOutputStream)
             .use { outputStream ->
-                addFileToTar(outputStream, `in`.toFile())
+                addFileToTar(outputStream, this.toFile())
                 outputStream.finish()
             }
-
         return path
     }
 
@@ -60,10 +67,7 @@ object CompressionUtil {
                 tOut.closeArchiveEntry()
             }
         } else {
-            tOut.closeArchiveEntry()
-            `in`.listFiles()?.forEach {
-                addFileToTar(tOut, it, basePath)
-            }
+            `in`.listFiles()?.forEach { childFile -> addFileToTar(tOut, childFile, basePath) }
         }
     }
 }

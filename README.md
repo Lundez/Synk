@@ -11,11 +11,14 @@ Sync &amp; Transfer files. Made on the JVM by Londogard.
 - [X] Get a FAT-jar running
 - [X] Server
 - [X] Client
-- [ ] GUI (...or should it exist even?)
+- [X] Make it "safe" by Try-Catching etc. (using `Result` through `runCatching`)
+- [ ] HTTPS / WebDAV : https://ktor.io/servers/features/websockets.html#Frame
 - [ ] DiscoveryService auto-connect (pinging or something, on same LAN.)
-- [ ] Investigate if perhaps Netty, KTOR, Micronaut, Fuel could work. 
+- [ ] Route through the RaspPi
+- [ ] Investigate if perhaps http4k, Netty, KTOR, Micronaut, Fuel could work. 
 - [ ] QR code "deep link"
 - [ ] Android App
+- [ ] GUI (...or should it exist even?)
 - [ ] Tests
 - [ ] ~~Get GraalVM native image to work (?). Otherwise FATJar will do.~~ (doesn't work 'cus of zstd-jni... WIP)
 
@@ -31,3 +34,7 @@ Potentially; Use RPi + KTOR to create a zero-copy transfer between buffers/clien
 * Add Chromecast support, because why not? #legacy
 
 **Finally:** WC3 Enfos!!!!
+
+https://examples.javacodegeeks.com/core-java/nio/java-nio-large-file-transfer-tutorial/
+https://fracpete.github.io/rsync4j/java/
+https://github.com/xerial/larray

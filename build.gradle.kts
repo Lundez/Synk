@@ -23,6 +23,8 @@ repositories {
     maven("https://jitpack.io")
 }
 
+val ktor_version = "1.3.2"
+
 dependencies {
     // Kotlin
     implementation(kotlin("stdlib"))
@@ -32,6 +34,16 @@ dependencies {
     implementation("org.apache.commons:commons-compress:1.20")
     implementation("com.github.luben:zstd-jni:1.4.5-6")
     implementation("com.github.ajalt:clikt:2.8.0")
+
+
+    // KTOR
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-websockets:$ktor_version")
+
     /**
     Compression:
     implementation("org.xerial.snappy:snappy-java:1.1.7.6")
@@ -48,7 +60,7 @@ dependencies {
     testImplementation("org.amshove.kluent:kluent:1.59")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
-    testImplementation("org.slf4j:slf4j-simple:1.7.26")
+    implementation("org.slf4j:slf4j-simple:1.7.26")
 }
 
 // Using graal achieves 50% size reduction of the run-file.
