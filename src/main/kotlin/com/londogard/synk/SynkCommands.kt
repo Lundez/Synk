@@ -5,7 +5,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
 import com.londogard.synk.client.SynkClient
-import com.londogard.synk.client.SynkWebClient
+// import com.londogard.synk.client.SynkWebClient
 import com.londogard.synk.server.SynkServer
 import kotlinx.coroutines.*
 import java.io.File
@@ -46,7 +46,7 @@ fun socketBasedSynk() = runBlocking {
         SynkClient.client("synk:192.168.0.171:31415:src")
     }
 }
-
+/**
 fun httpBasedSynk() = runBlocking {
     val a = async(Dispatchers.IO) {
         SynkWebClient.webServer()
@@ -55,11 +55,11 @@ fun httpBasedSynk() = runBlocking {
     async(Dispatchers.Default) {
         SynkWebClient.webClient()
     }.invokeOnCompletion { exitProcess(0) }
-}
+}**/
 
 fun main() {
     measureTimeMillis {
-        if (true) socketBasedSynk() else httpBasedSynk()
+        if (true) socketBasedSynk()
     }
         .also { println("Time taken $it ms") }
 }

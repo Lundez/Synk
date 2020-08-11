@@ -5,6 +5,7 @@ val kotlinVersion = "1.3.72"
 plugins {
     `maven-publish`
     application
+    id("org.beryx.runtime") version "1.11.2"
     id("com.github.johnrengelman.shadow") version "5.2.0"
     // id("com.palantir.graal") version "0.7.1"
     kotlin("jvm") version "1.3.72"
@@ -25,25 +26,28 @@ repositories {
 
 val ktor_version = "1.3.2"
 
+// TODO we can compress by a ton by downloading a subset of zstd-jni (now support ALL platforms!)
 dependencies {
     // Kotlin
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
-    implementation("com.github.zxing.zxing:core:zxing-3.4.0")
-    implementation("com.github.zxing.zxing:javase:zxing-3.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
+    // implementation("com.github.zxing.zxing:core:zxing-3.4.0")
+    // implementation("com.github.zxing.zxing:javase:zxing-3.4.0")
     implementation("org.apache.commons:commons-compress:1.20")
+    // e.g. zstd-jni:linux_amd64:1.4.5-6
     implementation("com.github.luben:zstd-jni:1.4.5-6")
     implementation("com.github.ajalt:clikt:2.8.0")
 
-
     // KTOR
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    //implementation("io.ktor:ktor-server-core:$ktor_version")
+    //implementation("io.ktor:ktor-server-netty:$ktor_version")
+//
+    //implementation("io.ktor:ktor-client-core:$ktor_version")
+    //implementation("io.ktor:ktor-client-cio:$ktor_version")
+    //implementation("io.ktor:ktor-client-websockets:$ktor_version")
 
-    implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-cio:$ktor_version")
-    implementation("io.ktor:ktor-client-websockets:$ktor_version")
-
+    //implementation("com.github.kittinunf.fuel:fuel:2.2.0")
+    //implementation("com.github.kittinunf.fuel:fuel-coroutines:2.2.0")
     /**
     Compression:
     implementation("org.xerial.snappy:snappy-java:1.1.7.6")
@@ -78,6 +82,14 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnit()
+}
+
+runtime {
+    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+    jpackage {
+        installerType = "deb" // https://badass-runtime-plugin.beryx.org/releases/latest/
+        // TODO better if modular (smaller!)
+    }
 }
 
 publishing {
