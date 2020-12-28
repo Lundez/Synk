@@ -5,7 +5,7 @@ val kotlinVersion = "1.3.72"
 plugins {
     `maven-publish`
     application
-    id("org.beryx.runtime") version "1.11.2"
+    id("org.beryx.runtime") version "1.12.1"
     id("com.github.johnrengelman.shadow") version "5.2.0"
     // id("com.palantir.graal") version "0.7.1"
     kotlin("jvm") version "1.3.72"
