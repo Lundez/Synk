@@ -4,12 +4,63 @@ import com.londogard.synk.discoveryservice.DiscoverService
 import com.londogard.synk.discoveryservice.DiscoverService.Port
 import com.londogard.synk.utils.CompressionUtil
 import com.londogard.synk.utils.CompressionUtil.compress
+import io.ktor.application.*
+import io.ktor.routing.*
+import io.ktor.server.cio.*
+import io.ktor.server.engine.*
+import io.rsocket.kotlin.RSocket
+import io.rsocket.kotlin.RSocketRequestHandler
+import io.rsocket.kotlin.core.RSocketServerSupport
+import io.rsocket.kotlin.core.rSocket
+import io.rsocket.kotlin.payload.Payload
+import io.rsocket.kotlin.plugin.Plugin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import java.net.InetSocketAddress
 import java.nio.channels.ServerSocketChannel
 import java.nio.file.Paths
 
 
 object SynkServer {
+    fun rsocketServer(filename: String): Unit = runCatching {
+        //create ktor server
+        embeddedServer(CIO) {
+            install(RSocketServerSupport) {
+                //configure rSocket server (all values have defaults)
+
+                //install interceptors
+                plugin = Plugin(
+                    //connection = listOf(::SomeConnectionInterceptor)
+                )
+            }
+            //configure routing
+            routing {
+                //configure route `url:port/rsocket`
+                rSocket("rsocket") {
+                    RSocketRequestHandler {
+                        //handler for request/response
+                        requestResponse = { request: Payload ->
+                            //... some work here
+                            delay(500) // work emulation
+                            Payload("data", "metadata")
+                        }
+                        //handler for request/stream
+                        requestStream = { request: Payload ->
+                            flow {
+                                repeat(1000) { i ->
+                                    emit(Payload("data: $i"))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }.start(true)
+        Unit
+    }
+        .onFailure { exception -> println("Server::CRASH ${exception.message}.\n\nStacktrace:\n${exception.stackTrace}") }
+        .getOrDefault(Unit)
+
     fun server(filename: String): Unit = runCatching {
         println("Server::init")
 
@@ -34,6 +85,7 @@ object SynkServer {
             remaining -= transferred
             position += transferred
         }
+
 
         println("Server::Finished, shutting done")
         socketChannel.close()

@@ -22,6 +22,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven("https://jitpack.io")
+    maven("https://oss.jfrog.org/oss-snapshot-local")
 }
 
 val ktor_version = "1.3.2"
@@ -37,6 +38,14 @@ dependencies {
     // e.g. zstd-jni:linux_amd64:1.4.5-6
     implementation("com.github.luben:zstd-jni:1.4.5-6")
     implementation("com.github.ajalt:clikt:2.8.0")
+
+    // Rsocket
+    implementation("io.rsocket.kotlin:rsocket-core:0.10.0-SNAPSHOT")
+    implementation("io.rsocket.kotlin:rsocket-transport-ktor:0.10.0-SNAPSHOT")
+    implementation("io.rsocket.kotlin:rsocket-transport-ktor-client:0.10.0-SNAPSHOT")
+    implementation("io.rsocket.kotlin:rsocket-transport-ktor-server:0.10.0-SNAPSHOT")
+    implementation("io.ktor:ktor-client-cio:1.4.1")
+    implementation("io.ktor:ktor-server-cio:1.4.1")
 
     // KTOR
     //implementation("io.ktor:ktor-server-core:$ktor_version")

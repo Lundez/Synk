@@ -12,14 +12,18 @@ Sync &amp; Transfer files. Made on the JVM by Londogard.
 - [X] Server
 - [X] Client
 - [X] Make it "safe" by Try-Catching etc. (using `Result` through `runCatching`)
+- [ ] Add support for [rsocket/rsocket-kotlin](https://github.com/rsocket/rsocket-kotlin)
 - [ ] HTTPS / WebDAV : https://ktor.io/servers/features/websockets.html#Frame
 - [ ] DiscoveryService auto-connect (pinging or something, on same LAN.)
+- [ ] Kotlin MPP with KotlinJS frontend! (fritz2?)
 - [ ] Route through the RaspPi
 - [ ] Investigate if perhaps http4k, Netty, KTOR, Micronaut, Fuel could work. 
 - [ ] QR code "deep link"
 - [ ] Android App
 - [ ] GUI (...or should it exist even?)
 - [ ] Tests
+- [ ] HTTP4K, or Fuel??? (Pretty clean HTTP code!)
+- [ ] Coroutine + Sockets? See [here](https://stackoverflow.com/questions/53736127/how-to-implement-nio-socket-client-using-kotlin-coroutines-in-java-code)
 - [ ] ~~Get GraalVM native image to work (?). Otherwise FATJar will do.~~ (doesn't work 'cus of zstd-jni... WIP)
 
 Potentially; Use RPi + KTOR to create a zero-copy transfer between buffers/clients?
