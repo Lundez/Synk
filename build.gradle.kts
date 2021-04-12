@@ -6,7 +6,7 @@ plugins {
     `maven-publish`
     application
     id("org.beryx.runtime") version "1.12.4"
-    id("com.github.johnrengelman.shadow") version "5.2.0"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
     // id("com.palantir.graal") version "0.7.1"
     kotlin("jvm") version "1.3.72"
 }
