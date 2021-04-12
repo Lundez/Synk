@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val kotlinVersion = "1.3.72"
+val kotlinVersion = "1.4.21"
 
 plugins {
     `maven-publish`
