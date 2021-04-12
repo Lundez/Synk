@@ -5,7 +5,7 @@ val kotlinVersion = "1.3.72"
 plugins {
     `maven-publish`
     application
-    id("org.beryx.runtime") version "1.11.2"
+    id("org.beryx.runtime") version "1.12.4"
     id("com.github.johnrengelman.shadow") version "5.2.0"
     // id("com.palantir.graal") version "0.7.1"
     kotlin("jvm") version "1.3.72"
@@ -41,7 +41,7 @@ dependencies {
 
     // Rsocket
     implementation("io.rsocket.kotlin:rsocket-core:0.10.0-SNAPSHOT")
-    implementation("io.rsocket.kotlin:rsocket-transport-ktor:0.10.0-SNAPSHOT")
+    implementation("io.rsocket.kotlin:rsocket-transport-ktor:0.13.0-SNAPSHOT")
     implementation("io.rsocket.kotlin:rsocket-transport-ktor-client:0.10.0-SNAPSHOT")
     implementation("io.rsocket.kotlin:rsocket-transport-ktor-server:0.10.0-SNAPSHOT")
     implementation("io.ktor:ktor-client-cio:1.4.1")
