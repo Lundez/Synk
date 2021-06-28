@@ -41,7 +41,7 @@ dependencies {
 
     // Rsocket
     implementation("io.rsocket.kotlin:rsocket-core:0.10.0-SNAPSHOT")
-    implementation("io.rsocket.kotlin:rsocket-transport-ktor:0.10.0-SNAPSHOT")
+    implementation("io.rsocket.kotlin:rsocket-transport-ktor:0.12.0")
     implementation("io.rsocket.kotlin:rsocket-transport-ktor-client:0.10.0-SNAPSHOT")
     implementation("io.rsocket.kotlin:rsocket-transport-ktor-server:0.10.0-SNAPSHOT")
     implementation("io.ktor:ktor-client-cio:1.4.1")
