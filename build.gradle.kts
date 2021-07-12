@@ -31,7 +31,7 @@ val ktor_version = "1.3.2"
 dependencies {
     // Kotlin
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
     // implementation("com.github.zxing.zxing:core:zxing-3.4.0")
     // implementation("com.github.zxing.zxing:javase:zxing-3.4.0")
     implementation("org.apache.commons:commons-compress:1.20")
