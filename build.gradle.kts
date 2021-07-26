@@ -73,7 +73,7 @@ dependencies {
     testImplementation("org.amshove.kluent:kluent:1.59")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
-    implementation("org.slf4j:slf4j-simple:1.7.26")
+    implementation("org.slf4j:slf4j-simple:1.7.32")
 }
 
 // Using graal achieves 50% size reduction of the run-file.
